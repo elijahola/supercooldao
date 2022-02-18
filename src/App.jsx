@@ -10,7 +10,7 @@ const sdk = new ThirdwebSDK("rinkeby");
 
 // We can grab a reference to our ERC-1155 contract.
 const bundleDropModule = sdk.getBundleDropModule(
-  "0xc247e676CB8428ed43F76246B8eA6dEF2bb1F6a2",
+  "0xC341C779De1Fa5acF6328731993b214E1f077b79",
 );
 
 const App = () => {

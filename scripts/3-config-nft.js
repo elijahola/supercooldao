@@ -2,7 +2,7 @@ import sdk from "./1-initialize-sdk.js";
 import { readFileSync } from "fs";
 
 const bundleDrop = sdk.getBundleDropModule(
-  "0xc247e676CB8428ed43F76246B8eA6dEF2bb1F6a2",
+  "0xC341C779De1Fa5acF6328731993b214E1f077b79",
 );
 
 (async () => {
@@ -11,7 +11,7 @@ const bundleDrop = sdk.getBundleDropModule(
       {
         name: "Super Cool Pass",
         description: "This NFT will give you access to Super Cool DAO!",
-        image: readFileSync("scripts/assets/Supercooldao.png"),
+        image: readFileSync("scripts/assets/supercoolpass.png"),
       },
     ]);
     console.log("✅ Successfully created a new NFT in the drop!");
