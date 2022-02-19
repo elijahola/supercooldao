@@ -1,5 +1,5 @@
 import { ThirdwebSDK } from "@3rdweb/sdk";
-
+import { ethers } from "ethers";
 import { useEffect, useMemo, useState } from "react";
 
 // import thirdweb
@@ -11,6 +11,13 @@ const sdk = new ThirdwebSDK("rinkeby");
 // We can grab a reference to our ERC-1155 contract.
 const bundleDropModule = sdk.getBundleDropModule(
   "0xC341C779De1Fa5acF6328731993b214E1f077b79",
+);
+const tokenModule = sdk.getTokenModule(
+  "0x31155F18Aa6069C9F7a51fC1f76e9b67Af8AA771"
+);
+
+const voteModule = sdk.getVoteModule(
+  "0xC6902AB24CE4D989E04f0c05fa3eDBd2f75Fc9e8",
 );
 
 const App = () => {
@@ -26,6 +33,33 @@ const App = () => {
   const [hasClaimedNFT, setHasClaimedNFT] = useState(false);
   // isClaiming lets us easily keep a loading state while the NFT is minting.
   const [isClaiming, setIsClaiming] = useState(false);
+
+// Holds the amount of token each member has in state.
+const [memberTokenAmounts, setMemberTokenAmounts] = useState({});
+// The array holding all of our members addresses.
+const [memberAddresses, setMemberAddresses] = useState([]);
+
+
+const [proposals, setProposals] = useState([]);
+const [isVoting, setIsVoting] = useState(false);
+const [hasVoted, setHasVoted] = useState(false);
+
+
+
+// Now, we combine the memberAddresses and memberTokenAmounts into a single array
+const memberList = useMemo(() => {
+  return memberAddresses.map((address) => {
+    return {
+      address,
+      tokenAmount: ethers.utils.formatUnits(
+        // If the address isn't in memberTokenAmounts, it means they don't
+        // hold any of our token.
+        memberTokenAmounts[address] || 0,
+        18,
+      ),
+    };
+  });
+}, [memberAddresses, memberTokenAmounts]);
 
   // Another useEffect!
 useEffect(() => {
@@ -77,8 +111,31 @@ useEffect(() => {
 if (hasClaimedNFT) {
   return (
     <div className="member-page">
-      <h1>🍪DAO Member Page</h1>
+      <h1>Super Cool Dashboard</h1>
       <p>Congratulations on being a member</p>
+      <div>
+        <div>
+          <h2>Member List</h2>
+          <table className="card">
+            <thead>
+              <tr>
+                <th>Address</th>
+                <th>Token Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              {memberList.map((member) => {
+                return (
+                  <tr key={member.address}>
+                    <td>{shortenAddress(member.address)}</td>
+                    <td>{member.tokenAmount}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 };
